@@ -1,11 +1,9 @@
-import random
 import re
 import numpy as np
 import torch
 import torch.nn.functional as F
 from scipy.optimize import linear_sum_assignment
-from typing import Any, Dict, List, Tuple
-from transformers import AutoTokenizer, AutoModelForCausalLM, AutoConfig
+from transformers import AutoTokenizer, AutoConfig
 
 from model.modeling_llada import LLaDAModelLM
 from generate import generate, generate_with_prefix_cache, generate_with_dual_cache
@@ -311,7 +309,6 @@ Documents:
         return ranking, outputs
 
 
-
 class PermutationListwiseWrapper(WrapperBase):
     _prompt_template = """Given a query and {num} documents indicated by a character identifier, rank the documents from most relevant to least relevant to the query.
 
@@ -435,7 +432,6 @@ Documents:
 
                         rank_pos = mask_positions[m]
                         ranking_tokens_str[rank_pos] = index_strs[doc_j]
-                        pos_conf[rank_pos] = prob_
                         used_docs.add(doc_j)
                         new_fills_this_step.append((rank_pos, doc_j, prob_))
 
@@ -460,7 +456,6 @@ Documents:
 
                         rank_pos = mask_positions[m]
                         ranking_tokens_str[rank_pos] = index_strs[doc_j]
-                        pos_conf[rank_pos] = float(score)
                         used_docs.add(doc_j)
                         new_fills_this_step.append((rank_pos, doc_j, float(score)))
                         filled += 1
@@ -473,7 +468,6 @@ Documents:
                     "num_to_new_fill": num_to_new_fill,
                     "new_fills_this_step": new_fills_this_step,
                     "used_docs_after_step": sorted(list(used_docs)),
-                    "assignment": "hungarian" if _HAS_SCIPY else "greedy_fallback",
                 }
             )
 
