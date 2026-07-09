@@ -7,7 +7,7 @@ from functools import partial
 from transformers.utils import logging
 
 from llm4ranking.evaluation.evaluator import evaluate
-from llm4ranking.ranker.base import TournamentReranker, PointwiseReranker, ListwiseSilidingWindowReranker
+from llm4ranking.ranker.base import PointwiseReranker, ListwiseSilidingWindowReranker
 
 from eval_utils import (
     LladaForEval,
@@ -77,7 +77,7 @@ if __name__ == "__main__":
         device="cuda",
     )
 
-    if args.rerank_method == "permutation_listwise_":
+    if args.rerank_method == "permutation_listwise":
         ranker = ListwiseSilidingWindowReranker()
         rerank = partial(
             ranker.rerank,
